@@ -3,9 +3,17 @@
 The author for this code is Chris Steinbach. A license statement isn't included in the original source. The original source link seems unavailable:
 http://csteinbach.com/public/cppdep-0.2.tar.gz
 
-I made a small patch a long time ago and was recently asked for a copy in the comments of my post. Re-hosting it here.
+I made a small patch a long time ago to display the chain of include files to a particular header, and was recently asked for a copy in the comments of my post. Re-hosting it here.
+Modified usage: `python explore.py PreprocessedSource.i HeaderToSearch.h`
+```
+* HeaderToSearch.h
+< ParentHeader0.h
+ …
+< ParentHeaderN.h
+< InputSource
+```
 
-### Details from
+### Original details from
 http://www.c2.com/cgi/wiki?CppDependencyAnalysis
 
 

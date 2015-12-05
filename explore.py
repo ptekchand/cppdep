@@ -3,6 +3,25 @@ import os
 from gui import Tree
 from Tkinter import *
 
+# Recursive search to display the include chain for a particular source.
+def displayIncludeChain(aNode):
+    currentNode = aNode
+    if currentNode.name() == searchFile:
+        # Found
+        print "* %s" % currentNode.name()
+        return 1
+    
+    found = 0
+    if currentNode.children():
+        for child in currentNode.children():
+            if currentNode != child: # This was the case with SKEConfig.h
+                found = displayIncludeChain(child)
+                if found == 1:
+                    print "< %s" % currentNode.name()
+                    return 1
+    # Not found
+    return found
+
 def formatNodeText(node):
         return "%s,    lines(%d),    total_lines(%d),    nested_included(%d)" % (node.name(), 
 		node.lines(), node.totalLines(), len(node.children()))
@@ -47,9 +66,14 @@ lines = open(file).xreadlines()
 depend = Depend()
 depend.feed(lines)
 dependTree = depend.getTree()
+searchFile = None
+if len(sys.argv) > 2:
+  searchFile = sys.argv[2]
 if dependTree is None:
   print "Error reading dependancy information from %s" % file
   sys.exit(0)
+if searchFile is not None:
+    displayIncludeChain(dependTree)
 
 # create the control
 t=Tree.Tree(master=root,
